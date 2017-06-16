@@ -229,7 +229,11 @@ namespace RSEnhancedPhoto.Source
             return true;
         }
 
-
+        public static void SavePng(PXCMImage image, string fileName)
+        {
+            var colorFilename = Path.GetDirectoryName(Application.ExecutablePath) + "\\color_" + fileName + ".png";
+            ToRGBBitmap(image).Save(colorFilename, ImageFormat.Png);
+        }
 
         /// <summary>
         /// Opens a PXCMCapture.Sample object from disk, loads it into a PXCMPhoto object to be used for processing

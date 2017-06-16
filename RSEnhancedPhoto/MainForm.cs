@@ -100,8 +100,16 @@ namespace RSEnhancedPhoto
                 PXCMSession session = PXCMSession.CreateInstance( );
                 RSUtility.SavePhoto( session, sampleArg.Sample );
 
+                // color map
+                // PXCMProjection projection = _rsRGBStream._senseManager.captureManager.device.CreateProjection();
+                // PXCMImage mappedColor = projection.CreateColorImageMappedToDepth(sampleArg.Sample.depth, sampleArg.Sample.color);
+
+                string name = DateTime.Now.ToString("hhmmss");
+                // Save png
+                RSUtility.SavePng(sampleArg.Sample.color, name);
+
                 // Reset back to false so it does not try to save a new snapshot on the next sample from the camera               
-                 _saveSnapshot = false;
+                _saveSnapshot = false;
             }
         }
 
