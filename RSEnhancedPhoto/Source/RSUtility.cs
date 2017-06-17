@@ -235,6 +235,28 @@ namespace RSEnhancedPhoto.Source
             ToRGBBitmap(image).Save(colorFilename, ImageFormat.Png);
         }
 
+        public static void SaveDepth(PXCMImage image, string fileName)
+        {
+            var colorFilename = Path.GetDirectoryName(Application.ExecutablePath) + "\\color_" + fileName + ".png";
+            var depthFilename = Path.GetDirectoryName(Application.ExecutablePath) + "\\depth_" + fileName + ".png";
+            PXCMImage.ImageData data;
+
+            image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_DEPTH, out data);
+            var depthArray = data.ToByteArray(0, image.info.width * image.info.height * 2);
+            image.ReleaseAccess(data);
+            // copy color
+            var depthRGB = (Bitmap)Image.FromFile(colorFilename);
+
+            var count = image.info.width * image.info.height;
+
+            for (int i = 0; i < count; i++)
+            {
+                depthRGB.SetPixel(i % image.info.width, i / image.info.width, Color.FromArgb(255, depthArray[i * 2], depthArray[i * 2 + 1], 255));
+            }
+            depthRGB.Save(depthFilename);
+
+        }
+
         /// <summary>
         /// Opens a PXCMCapture.Sample object from disk, loads it into a PXCMPhoto object to be used for processing
         /// </summary>

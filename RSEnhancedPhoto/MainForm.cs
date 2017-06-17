@@ -100,13 +100,28 @@ namespace RSEnhancedPhoto
                 PXCMSession session = PXCMSession.CreateInstance( );
                 RSUtility.SavePhoto( session, sampleArg.Sample );
 
-                // color map
-                // PXCMProjection projection = _rsRGBStream._senseManager.captureManager.device.CreateProjection();
-                // PXCMImage mappedColor = projection.CreateColorImageMappedToDepth(sampleArg.Sample.depth, sampleArg.Sample.color);
+                // map depth to color
+                PXCMProjection projection = _rsRGBStream._senseManager.captureManager.device.CreateProjection();
+                PXCMImage mappedDepth = projection.CreateDepthImageMappedToColor(sampleArg.Sample.depth, sampleArg.Sample.color);
+
+                /* 
+                // enchance depth
+                var photoUtils = PXCMEnhancedPhoto.PhotoUtils.CreateInstance(session);
+                PXCMPhoto photo = session.CreatePhoto();
+                photo.ImportFromPreviewSample(sampleArg.Sample);
+
+                var enhancedDepthPhoto = photoUtils.EnhanceDepth(photo, PXCMEnhancedPhoto.PhotoUtils.DepthFillQuality.HIGH);
+                var enhancedDepth = enhancedDepthPhoto.QueryDepth();
+                sampleArg.Sample.depth.CopyImage(enhancedDepth); */
+
+
 
                 string name = DateTime.Now.ToString("hhmmss");
                 // Save png
                 RSUtility.SavePng(sampleArg.Sample.color, name);
+
+                // save depth data
+                RSUtility.SaveDepth(mappedDepth, name);
 
                 // Reset back to false so it does not try to save a new snapshot on the next sample from the camera               
                 _saveSnapshot = false;

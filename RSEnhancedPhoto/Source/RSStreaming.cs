@@ -37,7 +37,7 @@ namespace RSEnhancedPhoto.Source
     class RSStreamingRGB
     {
         // SenseManager object
-        private PXCMSenseManager            _senseManager;
+        public PXCMSenseManager            _senseManager;
 
         // The session object
         private PXCMSession                 _session;
